@@ -16,6 +16,7 @@ body {
 }
 
 #main h1 {
+    color: #7c96c1,
     margin-top: 0;
     font-size: 35px;
     margin-bottom: 5px;
@@ -87,4 +88,3 @@ form input[type=text] {
     color: #fff;
     background-color: #0090da;
 }
-

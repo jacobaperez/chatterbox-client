@@ -36,7 +36,7 @@ describe('chatterbox', function() {
         done();
       });
 
-      xit('should send the correct message along with the request', function(done) {
+      it('should send the correct message along with the request', function(done) {
         var message = {
           username: 'Mel Brooks',
           text: 'It\'s good to be the king',

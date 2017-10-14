@@ -13,8 +13,7 @@ $(document).ready(function() {
   app = {};
 
   app.init = function () {
-
-
+    window.app.fetch();
   },
 
   app.server = 'http://parse.la.hackreactor.com/chatterbox/classes/messages';
@@ -38,21 +37,21 @@ $(document).ready(function() {
 
   app.fetch = function () {
     $.ajax({
-
       url: app.server,
       type: 'GET',
-      // data: floogle,
-
-
-      // function (data)
+      data: {order: '-createdAt'},
       contentType: 'application/json',
       success: function(data){
+        var messages = data.results;
+        messages.forEach(function(message) {
+          app.renderMessage(message);
+          app.renderRoom(message);
+        })
         console.log(data, 'chatterbox: Boom! Too late to change now!');
       },
       error: function(data) {
         console.log('no data!');
       }
-
     });
 
   }
@@ -63,12 +62,20 @@ $(document).ready(function() {
   }
 
   app.renderMessage = function(message){
-    var text = message.text
-    $('<p>' + text + '</p>').appendTo('#chats');
+    var text = _.escape(message.text);
+    var username = _.escape(message.username);
+    var room = _.escape(message.roomname);
+
+    if (username === message.username && text === message.text && room === message.roomname) {
+      text = text.slice(0,140);
+      username = username.slice(0,10);
+      $(`<p id=${room} class=${username}> ${username}: ${text}</p>`).appendTo('#chats');
+    }
+    console.log('You got some hackers');
   }
 
   app.renderRoom = function(message){
-    var room = message.roomname;
+    var room = _.escape(message.roomname);
     $('<option>'+ room + '</option>').appendTo('#roomSelect');
   }
 
@@ -113,9 +120,11 @@ $(document).ready(function() {
         var noScripts = messageText.split('<script>').length;
           if(noScripts > 1){ return; }
 
+
           if (messageText) {
-            $('<p>' + username + ':' + '</p>').appendTo('#chats');
-            $('<p id=' + room + ' class=' + username + '>' + messageText + '</p>').appendTo('#chats');
+            $(`<p id=${room} class=${username}> ${username}: ${messageText}</p>`).prependTo('#chats');
+            //  $('<p>' + username + ':' + '</p>').prependTo('#chats');
+            //  $('<p id=' + room + ' class=' + username + '>' + messageText + '</p>').prependTo('#chats');
             $('.messageInput').val('');
 
             var message = {
@@ -123,9 +132,12 @@ $(document).ready(function() {
               text: messageText,
               roomname: room
             }
+            // app.init();
             app.send(JSON.stringify(message));
-            app.fetch();
+            app.init();
+            // window.location.reload();
           }
+
         }
 
 
@@ -165,7 +177,7 @@ $(document).ready(function() {
 
 
 
-
-
+    //testing
+  app.init();
 
 });
