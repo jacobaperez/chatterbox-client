@@ -41,16 +41,16 @@ $(document).ready(function() {
 
       url: app.server,
       type: 'GET',
-      data: message,
+      // data: floogle,
 
 
       // function (data)
       contentType: 'application/json',
       success: function(data){
-        console.log('chatterbox: Boom! Too late to change now!');
+        console.log(data, 'chatterbox: Boom! Too late to change now!');
       },
       error: function(data) {
-        console.log('chatterbox: Didn\'t go through yo!');
+        console.log('no data!');
       }
 
     });
@@ -58,6 +58,7 @@ $(document).ready(function() {
   }
 
   app.clearMessages = function () {
+
     $('#chats').empty();
   }
 
@@ -114,7 +115,7 @@ $(document).ready(function() {
 
           if (messageText) {
             $('<p>' + username + ':' + '</p>').appendTo('#chats');
-            $('<p class=' + username + '>' + messageText + '</p>').appendTo('#chats');
+            $('<p id=' + room + ' class=' + username + '>' + messageText + '</p>').appendTo('#chats');
             $('.messageInput').val('');
 
             var message = {
@@ -123,16 +124,41 @@ $(document).ready(function() {
               roomname: room
             }
             app.send(JSON.stringify(message));
-
+            app.fetch();
           }
         }
 
 
      });
 
+     $('.clearMessages').on("click", function(event) {
+       if (event.which === 1) {
+
+         app.clearMessages
+        //  var room = $('.newRoom').val();
+        //  var existingRooms = $('#roomSelect').children();
+        //  var isNotScript = room.split('<script>').length;
+         //
+        //  if (isNotScript > 1) { return; }
+         //
+        //  for (var i = 0; i < existingRooms.length; i++) {
+        //    if ( room === existingRooms[i].value ){
+        //      alert('room is already there yo');
+        //      return;
+        //    }
+        //  }
+         //
+        //  if (room) {
+        //    $('<option id=' + room + '>' + room + '</option>').appendTo('#roomSelect');
+        //    $('.newRoom').val('');
+        //  }
+       }
+     });
+
     //  if ()
    $('#roomSelect').on("change", function(event){
      var room = $('select#roomSelect option:selected').val();
+
 
    });
 
