@@ -13,8 +13,11 @@ $(document).ready(function() {
   app = {};
 
   app.init = function () {
-    window.app.fetch();
+      window.app.fetch();
+    // setInterval(function(){
+    //   app.fetch()}, 5000)
   },
+
 
   app.server = 'http://parse.la.hackreactor.com/chatterbox/classes/messages';
 
@@ -25,13 +28,16 @@ $(document).ready(function() {
       data: message,
       contentType: 'application/json',
       success: function(data){
+        window.app.fetch();
         console.log('chatterbox: Boom! Too late to change now!');
+
       },
       error: function(data) {
         console.log('chatterbox: Didn\'t go through yo!');
       }
 
     });
+
   },
 
 
@@ -78,12 +84,17 @@ $(document).ready(function() {
     var room = _.escape(message.roomname);
     $('<option>'+ room + '</option>').appendTo('#roomSelect');
   }
+  var friendsList =[];
 
-  app.handleUsernameClick = function(){
-    $('.username').trigger('click');
+$("#main").on("click", ".username", function(){
+   var username = _.escape(message.username)||window.location.search.slice(10);
+    if(friendsList.indexOf(username) === -1){
+    ('<option>'+ room + '</option>').appendTo('#friendsList');
+      friendsList.push(username);
+    }
 
+})
 
-  }
 
   app.handleSubmit = function(){
 
@@ -122,7 +133,7 @@ $(document).ready(function() {
 
 
           if (messageText) {
-            $(`<p id=${room} class=${username}> ${username}: ${messageText}</p>`).prependTo('#chats');
+            // $(`<p id=${room} class=${username}> ${username}: ${messageText}</p>`).prependTo('#chats');
             //  $('<p>' + username + ':' + '</p>').prependTo('#chats');
             //  $('<p id=' + room + ' class=' + username + '>' + messageText + '</p>').prependTo('#chats');
             $('.messageInput').val('');
@@ -134,7 +145,6 @@ $(document).ready(function() {
             }
             // app.init();
             app.send(JSON.stringify(message));
-            app.init();
             // window.location.reload();
           }
 
@@ -178,6 +188,6 @@ $(document).ready(function() {
 
 
     //testing
-  app.init();
+  window.app.init();
 
 });
