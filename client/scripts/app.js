@@ -41,7 +41,7 @@ $(document).ready(function() {
 
       url: app.server,
       type: 'GET',
-      data: JSON.stringify(message),
+      data: message,
 
 
       // function (data)
@@ -97,26 +97,44 @@ $(document).ready(function() {
       }
 
       if (room) {
-        $('<option value=' + room + '>' + room + '</option>').appendTo('#roomSelect');
+        $('<option id=' + room + '>' + room + '</option>').appendTo('#roomSelect');
         $('.newRoom').val('');
       }
     }
   });
 
+    $('.messageInput').on("click keydown", function(event){
+      if (event.which === 13 || event.which === 1) {
+        var messageText = $('.messageInput').val();
+        var username = window.location.search.slice(10);
+        var room = $('select#roomSelect option:selected').val();
+
+        var noScripts = messageText.split('<script>').length;
+          if(noScripts > 1){ return; }
+
+          if (messageText) {
+            $('<p>' + username + ':' + '</p>').appendTo('#chats');
+            $('<p class=' + username + '>' + messageText + '</p>').appendTo('#chats');
+            $('.messageInput').val('');
+
+            var message = {
+              username: username,
+              text: messageText,
+              roomname: room
+            }
+            app.send(JSON.stringify(message));
+
+          }
+        }
 
 
+     });
 
+    //  if ()
+   $('#roomSelect').on("change", function(event){
+     var room = $('select#roomSelect option:selected').val();
 
-
-
-
-
-
-
-
-
-
-
+   });
 
 
 
